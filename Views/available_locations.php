@@ -23,8 +23,8 @@ $enrollment_centers = [
 $limit = 99999;
 $locationId = isset($_POST['location_id']) ? $_POST['location_id'] : null; 
 // Telegram Bot Details
-$telegram_bot_token = '8172844554:AAF7WxzImfalKAzpJFjg2RxEjDQFlkYsVWI';
-$telegram_chat_id = '-4595231898'; // Replace with your chat ID
+$telegram_bot_token = '0';
+$telegram_chat_id = '0'; // Replace with your chat ID
 
 
 function sendTelegramNotification($bot_token, $chat_id, $message) {
@@ -94,7 +94,7 @@ if ($locationId) {
             }
 
             if ($availability_found) {
-                sendTelegramNotification($telegram_bot_token, $telegram_chat_id, $notification_message);
+                //sendTelegramNotification($telegram_bot_token, $telegram_chat_id, $notification_message);
             } else {
                 echo "No slots available in the specified date range.";
             }
