@@ -49,22 +49,22 @@ NexusChecker is a project for monitoring and notifying about available appointme
 
 ---
 
-##Configuration
+## Configuration
 
-###Python Script
--Enrollment Centers: Modify the enrollment_centers dictionary in the script to include or remove enrollment centers as needed.
--Default Location ID: Change the location_id variable in the script to set your preferred default enrollment center.
--Date Range: Update the start_date and end_date variables in the script to define the range of dates to check for appointments.
+### Python Script
+- Enrollment Centers: Modify the enrollment_centers dictionary in the script to include or remove enrollment centers as needed.
+- Default Location ID: Change the location_id variable in the script to set your preferred default enrollment center.
+- Date Range: Update the start_date and end_date variables in the script to define the range of dates to check for appointments.
 
-###PHP Form
--Enrollment Centers: Update the $enrollment_centers array in the PHP script to include or remove enrollment centers.
--API URL: The PHP script fetches slots dynamically from the TTP Scheduler API.
+### PHP Form
+- Enrollment Centers: Update the $enrollment_centers array in the PHP script to include or remove enrollment centers.
+- API URL: The PHP script fetches slots dynamically from the TTP Scheduler API.
 
 ---
 
-##Example Outputs
+## Example Outputs
 
-###Python Script
+### Python Script
 The script prints available slots to the console and sends the first 10 slots to your Telegram chat:
 
       Checking available slots...
@@ -77,10 +77,10 @@ The script prints available slots to the console and sends the first 10 slots to
 ---
 
 ## Notes
--The Telegram API has a message size limit of 4096 characters. The Python script handles this by sending only the first 10 slots.
--Ensure the PHP script's server has internet access to make API requests.
+- The Telegram API has a message size limit of 4096 characters. The Python script handles this by sending only the first 10 slots.
+- Ensure the PHP script's server has internet access to make API requests.
 
 ---
 
-##Contributing
+## Contributing
 Feel free to fork this repository and submit pull requests for improvements or additional features.
