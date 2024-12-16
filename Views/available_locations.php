@@ -1,5 +1,5 @@
 <?php
-// Array of enrollment centers with ID and name
+
 $enrollment_centers = [
     8040 => "Albuquerque Enrollment Center - Albuquerque International Sunport 2200 Sunport Blvd SE Albuquerque NM 87106",
     6580 => "American Express - New York - 0 UNAVAILABLE NEW YORK NY 99999 US",
@@ -20,8 +20,29 @@ $enrollment_centers = [
 ];
 
 
-$limit = 1;
+$limit = 99999;
 $locationId = isset($_POST['location_id']) ? $_POST['location_id'] : null; 
+// Telegram Bot Details
+$telegram_bot_token = '8172844554:AAF7WxzImfalKAzpJFjg2RxEjDQFlkYsVWI';
+$telegram_chat_id = '-4595231898'; // Replace with your chat ID
+
+
+function sendTelegramNotification($bot_token, $chat_id, $message) {
+    $url = "https://api.telegram.org/bot$bot_token/sendMessage";
+    $data = [
+        'chat_id' => $chat_id,
+        'text' => $message
+    ];
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data),
+        ],
+    ];
+    $context  = stream_context_create($options);
+    file_get_contents($url, false, $context);
+}
 
 
 echo '<form method="post">';
@@ -38,28 +59,44 @@ foreach ($enrollment_centers as $id => $name) {
 echo '</select>';
 echo '<button type="submit">Check Available Slots</button>';
 echo '</form>';
-
-
+// NOT HIS PLACE var_dump($data);
+  
 if ($locationId) {
     $url = "https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=$limit&locationId=$locationId&minimum=1";
 
+    //https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=9999999&locationId=5021&minimum=1
 
-   //$url = "https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=1&locationId=5021&minimum=1";
+    //$url = "https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=1&locationId=5021&minimum=1";
 
     $response = @file_get_contents($url);
     if ($response === FALSE) {
         echo "<p>Unable to fetch data from the API. Please try again later.</p>";
     } else {
         $data = json_decode($response, true);
-
-        var_dump($data);
-
-        echo '<h3>Available Slots:</h3>';
+        echo '<h3>Available Slots Between December 30 and January 3:</h3>';
         if ($data && is_array($data)) {
+            $availability_found = false;
+            $notification_message = "Available Slots:\n";
+
             foreach ($data as $slot) {
-                
-                $date = date("Y-m-d H:i:s", strtotime($slot['startTimestamp']));
-                echo "Date: " . $date . "<br>";
+                $startTimestamp = strtotime($slot['startTimestamp']);
+                $endTimestamp = strtotime($slot['endTimestamp']);
+
+                $startDate = strtotime('2024-12-30');
+                $endDate = strtotime('2025-01-03 23:59:59');
+
+                if ($startTimestamp >= $startDate && $startTimestamp <= $endDate) {
+                    $availability_found = true;
+                    $formattedDate = date("Y-m-d H:i:s", $startTimestamp);
+                    echo "Date: " . $formattedDate . "<br>";
+                    $notification_message .= "- Date: $formattedDate\n";
+                }
+            }
+
+            if ($availability_found) {
+                sendTelegramNotification($telegram_bot_token, $telegram_chat_id, $notification_message);
+            } else {
+                echo "No slots available in the specified date range.";
             }
         } else {
             echo "No slots available.";
