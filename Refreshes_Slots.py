@@ -46,7 +46,7 @@ def main():
             for slot in slots:
                 start_timestamp = datetime.fromisoformat(slot['startTimestamp'].replace('Z', ''))
 
-                if start_date <= start_timestamp <= end_date:
+                if start_date <= start_timestamp <= end_date and start_timestamp.hour >= 12:
                     availability_found = True
                     formatted_date = start_timestamp.strftime("%Y-%m-%d %H:%M:%S")
                     print(f"Date: {formatted_date}")
